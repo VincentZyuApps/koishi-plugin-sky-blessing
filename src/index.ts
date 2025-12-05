@@ -38,19 +38,24 @@ export function apply(ctx: Context, cfg: Config) {
   ctx.command(`${cfg.commandName}`)
     .action( async ( {session, options} ) => {
 
-      let imageStr: string
-      
-      if (cfg.sendBase64) {
-        const response = await ctx.http.get(`${cfg.backendUrl}/blessing`, {
-          responseType: 'arraybuffer'
-        })
-        const base64Data = Buffer.from(response).toString('base64')
-        imageStr = `data:image/png;base64,${base64Data}`
-      } else {
-        imageStr = `${cfg.backendUrl}/blessing`
-      }
+      try {
+        let message
+        
+        if (cfg.sendBase64) {
+          const response = await ctx.http.get(`${cfg.backendUrl}/blessing`, {
+            responseType: 'arraybuffer'
+          })
+          const base64Data = Buffer.from(response).toString('base64')
+          message = h('image', { url: `data:image/png;base64,${base64Data}` })
+        } else {
+          message = h.image(`${cfg.backendUrl}/blessing`)
+        }
 
-      await session.send(`${h.quote(session.messageId)}${h.image(imageStr)}`)
+        await session.send(`${h.quote(session.messageId)}${message}`)
+      } catch (error) {
+        ctx.logger.error(`Failed to send blessing image: ${error}`)
+        await session.send('图片获取失败了呢~')
+      }
 
     } )
 
