@@ -36,9 +36,6 @@ export const Config: Schema<Config> = Schema.intersect([
 export function apply(ctx: Context, cfg: Config) {
 
   ctx.command(`${cfg.commandName}`)
-    .alias('光遇抽签')
-    .alias('awa_sky_blessing')
-    .alias('asb')
     .action( async ( {session, options} ) => {
 
       let imageStr: string
