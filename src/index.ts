@@ -6,6 +6,8 @@ export const inject = {
     required: ["http"]
 }
 
+export const reusable = true // 声明此插件可重用
+
 export interface Config {
   backendUrl: string
   sendBase64: boolean
