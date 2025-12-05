@@ -9,11 +9,18 @@ export const inject = {
 export const reusable = true // 声明此插件可重用
 
 export interface Config {
+  commandName: string
   backendUrl: string
   sendBase64: boolean
 }
 
 export const Config: Schema<Config> = Schema.intersect([
+
+  Schema.object({
+    commandName: Schema.string()
+      .default('光遇抽签')
+      .description('命令名称')
+  }).description('指令设置'),
 
   Schema.object({
     backendUrl: Schema.string()
@@ -22,13 +29,14 @@ export const Config: Schema<Config> = Schema.intersect([
     sendBase64: Schema.boolean()
       .default(false)
       .description('是否发送Base64编码的图片')
-  })
+  }).description('后端设置')
 
 ])
 
 export function apply(ctx: Context, cfg: Config) {
 
-  ctx.command('光遇抽签')
+  ctx.command(`${cfg.commandName}`)
+    .alias('光遇抽签')
     .alias('awa_sky_blessing')
     .alias('asb')
     .action( async ( {session, options} ) => {
