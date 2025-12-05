@@ -45,7 +45,7 @@ export function apply(ctx: Context, cfg: Config) {
           responseType: 'arraybuffer'
         })
         const base64Data = Buffer.from(response).toString('base64')
-        imageStr = `base64:png:${base64Data}`
+        imageStr = `data:image/png;base64,${base64Data}`
       } else {
         imageStr = `${cfg.backendUrl}/blessing`
       }
