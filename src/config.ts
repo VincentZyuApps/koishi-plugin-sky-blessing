@@ -46,15 +46,15 @@ export const ConfigSchema: Schema<PluginConfig> = Schema.intersect([
     backendUrl: Schema.string()
       .default('http://127.0.0.1:51205')
       .description('🔗 后端服务地址\n\n💡 可以去这里部署后端: `https://gitee.com/vincent-zyu/skyblessings-fastapi-pillow`'),
-    sendBase64: Schema.boolean()
-      .default(false)
-      .description('🖼️ 是否将图片 Base64 编码后发送（关闭则发送 URL 链接）'),
     enableQuote: Schema.boolean()
       .default(true)
       .description('💬 开启后，本插件发送的所有消息都会引用（回复）触发指令的消息'),
     qqMarkdownSendImage: Schema.boolean()
       .default(true)
       .description('🖼️ 「光遇抽签md」命令是否同时发送图片（关闭则仅发送 Markdown 文本）'),
+    alignWithTab: Schema.boolean()
+      .default(true)
+      .description('📏 文字对齐：在冒号前后添加制表符使文本对齐（⚠️ 仅对「光遇抽签」和「光遇抽签md」的文字部分生效，不影响图片）'),
   }).description('🌐 后端设置'),
 
   // 📊 参数映射表设置

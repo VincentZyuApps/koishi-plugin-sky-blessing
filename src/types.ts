@@ -26,10 +26,14 @@ export const USAGE = `
 
 <h3 style="color: #3498db;">🔗 后端服务</h3>
 <p>本插件需要配合后端服务使用，请先部署后端：</p>
-<ul>
-  <li><a href="https://github.com/VincentZyuApps/skyblessings-fastapi-pillow">GitHub 后端仓库</a></li>
-  <li><a href="https://gitee.com/vincent-zyu/skyblessings-fastapi-pillow">Gitee 后端仓库</a></li>
-</ul>
+<p>
+  <a href="https://github.com/VincentZyuApps/skyblessings-fastapi-pillow">
+    <img src="https://img.shields.io/badge/GitHub_Backend-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Backend"/>
+  </a>
+  <a href="https://gitee.com/vincent-zyu/skyblessings-fastapi-pillow">
+    <img src="https://img.shields.io/badge/Gitee_Backend-C71D23?style=for-the-badge&logo=gitee&logoColor=white" alt="Gitee Backend"/>
+  </a>
+</p>
 <p>部署完成后，在插件配置中填写 <code>backendUrl</code> 为后端服务地址。</p>
 
 <h3 style="color: #2ecc71;">🎮 命令列表</h3>
@@ -51,7 +55,7 @@ export const USAGE = `
   </tr>
   <tr>
     <td><code>光遇抽签md</code></td>
-    <td>获取祈福签图片 + Markdown格式</td>
+    <td>获取祈福签图片(可选) + Markdown格式</td>
     <td>仅QQ平台</td>
   </tr>
 </table>
@@ -105,9 +109,23 @@ export interface PluginConfig {
     qqMarkdown: string  // 📝 发送图片+Markdown的命令名（仅QQ）
   }
   backendUrl: string           // 🔗 后端服务地址
-  sendBase64: boolean          // 🖼️ 是否发送Base64编码的图片
   enableQuote: boolean         // 💬 是否引用回复触发指令的消息
   qqMarkdownSendImage: boolean  // 🖼️ QQ Markdown命令是否发送图片
+  alignWithTab: boolean        // 📏 文字对齐：冒号前后添加制表符
   logLevel: 'silent' | 'error' | 'warn' | 'info' | 'debug'  // 🔊 日志级别
   paramMappings: ParamMapping[] // 📋 参数映射表
+}
+
+// 📊 抽签统计数据记录
+export interface BlessingStats {
+  timestamp: number           // 时间戳
+  userId: string              // 用户ID
+  platform: string            // 平台
+  username?: string           // 用户名（可选）
+  fortune_level: string       // 吉祥程度
+  dordas: string              // 结缘物
+  dordas_color: string        // 缘彩
+  entry: string               // 宜忌词条
+  responseTime: number        // API响应时间（毫秒）
+  commandType: 'image' | 'text' | 'qq-markdown'  // 命令类型
 }

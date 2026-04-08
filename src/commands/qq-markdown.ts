@@ -28,10 +28,11 @@ export function registerQQMarkdownCommand(
         logger.info(`[光遇抽签md] ✅ 解析参数: ${JSON.stringify(params)}`)
 
         // 📡 请求 JSON 数据
-        const result = await api.fetchBlessing('json', params) as BlessingResult
+        const result = await api.fetchBlessing('json', params, 'qq-markdown') as BlessingResult
         logger.info(`[光遇抽签md] 📄 JSON结果: fortune_level=${result.fortune_level}`)
 
-        // 📝 构建 Markdown 内容（从后端值中提取标签）
+        // 📝 构建 Markdown 内容（从后端值中提取标签） （支持制表符对齐）
+        
         // 后端返回格式如："结缘物：遥鲲"、"缘彩：梧枝绿"，提取冒号前后分别加粗和显示
         const extractLabelAndValue = (text: string): [string, string] => {
           const idx = text.indexOf('：')
@@ -40,29 +41,24 @@ export function registerQQMarkdownCommand(
         }
         const [dordasLabel, dordasValue] = extractLabelAndValue(result.dordas)
         const [colorLabel, colorValue] = extractLabelAndValue(result.dordas_color)
-        
         const [entryLabel, entryValue] = extractLabelAndValue(result.entry)
         
-        const markdownContent = `# \u{1F38B} ${result.fortune_level}\n\n` +
-          `**${dordasLabel}**：${dordasValue}\n` +
-          `**${colorLabel}**：${colorValue}\n` +
-          `**🎨 色值**：\`${result.color_hex}\`\n\n` +
-          `> ${result.blessing}\n\n` +
-          `**${entryLabel}**：${entryValue}`
+        const TAB = config.alignWithTab ? '\t' : ''
 
+        const markdownContent = `# 🎋 ${result.fortune_level} ✨\n\n` +
+          `**${dordasLabel}**：${TAB}${dordasValue}\n` +
+          `**${colorLabel}**：${TAB}${colorValue}\n` +
+          `**背景色**：${TAB}\`${result.color_hex}\`\n\n` +
+          `> 「${result.blessing}」\n\n` +
+          `**${entryLabel}**：${TAB}${entryValue}`
         logger.info(`[光遇抽签md] 📄 Markdown内容: ${markdownContent}`)
 
         // 🖼️ 先发送图片
-        let imageSegment
-        if (config.sendBase64 && result.image_base64) {
-          imageSegment = h('image', {
-            url: `data:image/png;base64,${result.image_base64}`
-          })
-        } else {
-          const imageBuffer = await api.fetchBlessing('image', params) as Buffer
-          imageSegment = h('image', { url: api.toBase64Image(imageBuffer) })
-        }
-
+        // 🖼️ 使用 JSON 中的 base64 图片（不再单独请求）
+        logger.info(`[光遇抽签md] 🖼️ 使用 JSON 中的 base64 图片`)
+        const imageSegment = h('image', {
+          url: `data:image/png;base64,${result.image_base64}`
+        })
         // 💬 发送图片（根据配置决定是否引用回复）
         logger.info(`[光遇抽签md] 📤 发送图片中...`)
         const quotePart = config.enableQuote ? h.quote(session.messageId) : ''

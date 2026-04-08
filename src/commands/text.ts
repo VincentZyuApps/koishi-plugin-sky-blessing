@@ -13,7 +13,7 @@ export function registerTextCommand(
   ctx.command(config.commandNames.text)
     .action(async ({ session }) => {
       logger.info(`[光遇抽签] 🎯 命令触发, userId=${session.userId}, platform=${session.platform}`)
-      logger.info(`[光遇抽签] ⚙️ 配置: backendUrl=${config.backendUrl}, sendBase64=${config.sendBase64}`)
+      logger.info(`[光遇抽签] ⚙️ 配置: backendUrl=${config.backendUrl}`)
 
       try {
         // 🔄 解析参数
@@ -21,31 +21,27 @@ export function registerTextCommand(
         logger.info(`[光遇抽签] ✅ 解析参数: ${JSON.stringify(params)}`)
 
         // 📡 请求 JSON 数据
-        const result = await api.fetchBlessing('json', params) as BlessingResult
+        const result = await api.fetchBlessing('json', params, 'text') as BlessingResult
         logger.info(`[光遇抽签] 📄 JSON结果: fortune_level=${result.fortune_level}, dordas=${result.dordas}`)
 
-        // 📝 构建文本内容
+        // 📝 构建文本内容（支持制表符对齐）
+        const TAB = config.alignWithTab ? '\t' : ''
         const textParts = [
-          `🎋 ${result.fortune_level}`,
-          result.dordas,
-          `${result.dordas_color}`,
-          `「${result.blessing}」`,
-          `${result.entry}`,
+          `🎋 ${result.fortune_level} ✨`,
+          `${result.dordas.split('：')[0]}：${TAB}${result.dordas.split('：')[1] || ''}`,
+          `${result.dordas_color.split('：')[0]}：${TAB}${result.dordas_color.split('：')[1] || ''}`,
+          `背景色：${TAB}\`${result.color_hex}\``,
+          '',
+          `「${result.blessing}」\n`,
+          `${result.entry.split('：')[0]}：${TAB}${result.entry.split('：')[1] || ''}`,
         ]
 
         // 🖼️ 构建图片部分
-        let imageSegment
-        if (config.sendBase64 && result.image_base64) {
-          logger.info(`[光遇抽签] 🖼️ 使用 JSON 中的 base64 图片`)
-          imageSegment = h('image', {
-            url: `data:image/png;base64,${result.image_base64}`
-          })
-        } else {
-          logger.info(`[光遇抽签] 📡 单独请求图片`)
-          const imageBuffer = await api.fetchBlessing('image', params) as Buffer
-          imageSegment = h('image', { url: api.toBase64Image(imageBuffer) })
-        }
-
+        // 🖼️ 使用 JSON 中的 base64 图片（不再单独请求）
+        logger.info(`[光遇抽签] 🖼️ 使用 JSON 中的 base64 图片`)
+        const imageSegment = h('image', {
+          url: `data:image/png;base64,${result.image_base64}`
+        })
         // 💬 发送消息（根据配置决定是否引用回复）
         logger.info(`[光遇抽签] 📤 发送消息中...`)
         const quotePart = config.enableQuote ? h.quote(session.messageId) : ''

@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-sky-blessing",
-  "description": "光遇抽签，对接后端",
-  "version": "0.2.2",
+  "description": "🎋 Koishi光遇祈福签插件 | 随机生成Sky: Children of the Light风格祈福签图片 🖼️ 支持三种输出模式：仅图片/图片+文字/QQ原生Markdown 📱 可配置参数映射构建个性化种子 🔧 内置日志级别控制",
+  "version": "0.2.3-beta.1+20260408",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [

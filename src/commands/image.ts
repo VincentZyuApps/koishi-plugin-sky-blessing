@@ -13,7 +13,7 @@ export function registerImageCommand(
   ctx.command(config.commandNames.image)
     .action(async ({ session }) => {
       logger.info(`[光遇抽签图] 🎯 命令触发, userId=${session.userId}, platform=${session.platform}`)
-      logger.info(`[光遇抽签图] ⚙️ 配置: backendUrl=${config.backendUrl}, sendBase64=${config.sendBase64}`)
+      logger.info(`[光遇抽签图] ⚙️ 配置: backendUrl=${config.backendUrl}`)
       logger.info(`[光遇抽签图] 📋 paramMappings: ${JSON.stringify(config.paramMappings)}`)
 
       try {
@@ -22,18 +22,12 @@ export function registerImageCommand(
         logger.info(`[光遇抽签图] ✅ 解析参数: ${JSON.stringify(params)}`)
 
         // 📡 请求图片
-        const imageBuffer = await api.fetchBlessing('image', params) as Buffer
+        const imageBuffer = await api.fetchBlessing('image', params, 'image') as Buffer
         logger.info(`[光遇抽签图] 🖼️ 图片接收成功, 大小=${imageBuffer.length} bytes`)
 
-        // 🖼️ 构建消息
-        let message
-        if (config.sendBase64) {
-          message = h('image', { url: api.toBase64Image(imageBuffer) })
-        } else {
-          const url = `${config.backendUrl}/blessing?type=image&${new URLSearchParams(params)}`
-          logger.info(`[光遇抽签图] 🔗 图片URL: ${url}`)
-          message = h.image(url)
-        }
+        // 🖼️ 构建消息（始终使用Base64）
+        const message = h('image', { url: api.toBase64Image(imageBuffer) })
+        logger.info(`[光遇抽签图] 🖼️ 图片已转换为Base64`)
 
         // 💬 发送消息（根据配置决定是否引用回复）
         logger.info(`[光遇抽签图] 📤 发送消息中...`)
