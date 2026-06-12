@@ -5,8 +5,8 @@
 [![npm](https://img.shields.io/npm/v/koishi-plugin-sky-blessing?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-sky-blessing)
 [![npm-download](https://img.shields.io/npm/dm/koishi-plugin-sky-blessing?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-sky-blessing)
 
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/VincentZyuApps/sky-blessing)
-[![Gitee](https://img.shields.io/badge/Gitee-C71D23?style=for-the-badge&logo=gitee&logoColor=white)](https://gitee.com/vincent-zyu/sky-blessing)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/VincentZyuApps/koishi-plugin-sky-blessing)
+[![Gitee](https://img.shields.io/badge/Gitee-C71D23?style=for-the-badge&logo=gitee&logoColor=white)](gitee.com/vincent-zyu/koishi-plugin-sky-blessing)
 
 [![Koishi Forum](https://img.shields.io/badge/forum.koishi.xyz_topic_12558-5546A3?style=for-the-badge&logo=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Ff%2Ff3%2FKoishi.js_Logo.png&logoColor=white)](https://forum.koishi.xyz/t/topic/12467)
 [![QQ群](https://img.shields.io/badge/QQ群-1085190201-12B7F5?style=flat-square&logo=qq&logoColor=white)](https://qm.qq.com/q/4vjto4V7Di)
