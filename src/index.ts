@@ -1,6 +1,7 @@
 import { Context } from 'koishi'
 import { ConfigSchema } from './config'
-import { PluginConfig, USAGE } from './types'
+import { PluginConfig } from './types'
+export { usage } from './usage'
 import { createLogger, SkyLogger } from './logger'
 import { BlessingAPI } from './api'
 import { registerImageCommand } from './commands/image'
@@ -8,8 +9,6 @@ import { registerTextCommand } from './commands/text'
 import { registerQQMarkdownCommand } from './commands/qq-markdown'
 
 export const name = 'sky-blessing'
-
-export const usage = USAGE
 
 export const inject = {
   required: ['http']
