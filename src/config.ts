@@ -22,9 +22,6 @@ const DEFAULT_MAPPINGS: ParamMapping[] = [
   { enabled: false, key: 'e', value: 'avatar_hash' },
 ]
 
-// 🔊 日志级别选项
-const LOG_LEVEL_OPTIONS = ['silent', 'error', 'warn', 'info', 'debug'] as const
-
 export const ConfigSchema: Schema<PluginConfig> = Schema.intersect([
   // 🔧 命令名称设置
   Schema.object({
@@ -75,9 +72,12 @@ export const ConfigSchema: Schema<PluginConfig> = Schema.intersect([
 
   // 🔧 调试设置
   Schema.object({
-    logLevel: Schema.union(LOG_LEVEL_OPTIONS)
-      .role('radio')
-      .default('info')
-      .description('🔊 插件日志级别：silent（静默）/ error（仅错误）/ warn（警告+错误）/ info（常规信息）/ debug（详细调试）'),
+    logLevel: Schema.union([
+      Schema.const('silent').description('🔇 Silent — 仅输出严重错误'),
+      Schema.const('error').description('❌ Error — 输出错误'),
+      Schema.const('warn').description('⚠️ Warn — 输出错误+警告'),
+      Schema.const('info').description('ℹ️ Info — 正常信息输出（默认）'),
+      Schema.const('debug').description('🐛 Debug — 输出全部调试信息'),
+    ]).role('radio').default('info').description('🔊 插件日志级别'),
   }).description('🔧 调试设置'),
 ])
